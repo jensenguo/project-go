@@ -1,4 +1,4 @@
-// handle 函数逻辑封装
+// Package handle 函数逻辑封装
 package handle
 
 import (

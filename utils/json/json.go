@@ -1,5 +1,5 @@
-// Package tjson json相关函数
-package tjson
+// Package json json相关函数
+package json
 
 import (
 	"bytes"
