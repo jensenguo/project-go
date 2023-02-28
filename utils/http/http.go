@@ -8,9 +8,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"reflect"
 	"time"
 )
 
+// Client http client接口定义
 type Client interface {
 	Post(ctx context.Context, url string, req, rsp interface{}) error
 }
@@ -30,6 +32,7 @@ func NewClient(address string, opts ...option) Client {
 	return &client{httpClient: c}
 }
 
+// OptionWithTimeout 设置超时时间
 func OptionWithTimeout(timeout time.Duration) option {
 	return func(c *http.Client) error {
 		c.Timeout = timeout
@@ -37,9 +40,12 @@ func OptionWithTimeout(timeout time.Duration) option {
 	}
 }
 
-// Post 发送POST请求，req必须是json结构体
+// Post 发送POST请求
 func (c *client) Post(ctx context.Context, url string, req, rsp interface{}) error {
-	// 判断req，rsp必须是指针
+	// 判断rsp必须是指针
+	if reflect.TypeOf(rsp).Kind() != reflect.Ptr {
+		return fmt.Errorf("rsp must be a pointer")
+	}
 	breq, err := json.Marshal(req)
 	if err != nil {
 		return fmt.Errorf("req is not json struct fail, err: %v", err)
