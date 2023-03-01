@@ -19,19 +19,21 @@ type Client interface {
 
 type client struct {
 	httpClient *http.Client
+	scheme     string
 	host       string
 }
 
 type option func(c *http.Client) error
 
 // NewClient 新建http client
-func NewClient(host string, opts ...option) Client {
+func NewClient(scheme, host string, opts ...option) Client {
 	c := &http.Client{}
 	for _, opt := range opts {
 		opt(c)
 	}
 	return &client{
 		httpClient: c,
+		scheme:     scheme,
 		host:       host,
 	}
 }
@@ -54,7 +56,8 @@ func (c *client) Post(ctx context.Context, urn string, req, rsp interface{}) err
 	if err != nil {
 		return fmt.Errorf("req is not json struct fail, err: %v", err)
 	}
-	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, c.host+urn, bytes.NewBuffer(breq))
+	url := fmt.Sprintf("%s://%s%s", c.scheme, c.host, urn)
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewBuffer(breq))
 	if err != nil {
 		return fmt.Errorf("new request with context fail, err: %v", err)
 	}
