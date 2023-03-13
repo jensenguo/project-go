@@ -11,7 +11,7 @@ import (
 // RegisterServer 服务注册接口
 func (c *client) RegisterServer(serviceInstance *registry.ServiceInstance, opts ...nacos.Option) error {
 	if err := c.GetRegistrarClient(opts...).Register(context.Background(), serviceInstance); err != nil {
-		return fmt.Errorf("register fail, err: %v.", err)
+		return fmt.Errorf("register server fail, err: %v.", err)
 	}
 	return nil
 }

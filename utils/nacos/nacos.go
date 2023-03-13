@@ -55,11 +55,15 @@ func NewClient(hostport string, serverOpts []constant.ServerOption,
 	serverConfigs := []constant.ServerConfig{
 		*constant.NewServerConfig(ip, port, append(defaultServerOpts, serverOpts...)...),
 	}
-	defaultCLientOpts := []constant.ClientOption{
+	defaultClientOpts := []constant.ClientOption{
 		constant.WithTimeoutMs(5000),
 		constant.WithLogLevel("debug"),
+		constant.WithNotLoadCacheAtStart(false),
+		constant.WithLogDir("/usr/local/server/nacos/log"),
+		constant.WithCacheDir("/usr/local/server/nacos/cache"),
+		constant.WithUpdateCacheWhenEmpty(true),
 	}
-	clientConfig := constant.NewClientConfig(append(defaultCLientOpts, clientOpts...)...)
+	clientConfig := constant.NewClientConfig(append(defaultClientOpts, clientOpts...)...)
 	nc, err := clients.NewNamingClient(
 		vo.NacosClientParam{
 			ClientConfig:  clientConfig,
