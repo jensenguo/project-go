@@ -5,12 +5,11 @@ import (
 	"encoding/binary"
 	"fmt"
 	"net"
-	"runtime"
 )
 
-// NetInterfaceIP 通过指定的网卡名称获取对应的ip地址
-func NetInterfaceIP(name string) (string, error) {
-	itf, err := net.InterfaceByName(name) //here your interface
+// GetInterfaceIP 通过指定的网卡名称获取对应的ip地址
+func GetInterfaceIP(name string) (string, error) {
+	itf, err := net.InterfaceByName(name)
 	if err != nil {
 		return "", err
 	}
@@ -26,19 +25,12 @@ func NetInterfaceIP(name string) (string, error) {
 			}
 		}
 	}
-	return "", fmt.Errorf("not found")
+	return "", fmt.Errorf("get net %s ip fail", name)
 }
 
-// LocalIP 获取系统默认网卡名称获取对应的ip地址
+// LocalIP 默认网卡0对应的ip地址
 func LocalIP() string {
-	name := "eth1"
-	if runtime.GOOS == "darwin" {
-		name = "en0"
-	}
-	ip, err := NetInterfaceIP(name)
-	if err != nil {
-		return ""
-	}
+	ip, _ := GetInterfaceIP("eth0")
 	return ip
 }
 
