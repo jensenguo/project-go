@@ -109,6 +109,7 @@ func (c *client) getName(group, dataID, key string) string {
 
 func (c *client) findConfig(configs []*sourceconfig.KeyValue, key string) (*sourceconfig.KeyValue, error) {
 	for _, config := range configs {
+		log.Errorf("config %+v", config)
 		if config.Key == key {
 			return config, nil
 		}
